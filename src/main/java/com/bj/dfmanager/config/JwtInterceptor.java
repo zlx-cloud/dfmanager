@@ -62,7 +62,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         // 以下为：同一个用户只能在一个地方登录
         if (!token.equals(user.getToken())) {
-            log.error("token验证失败");
+            log.error("token验证失败 ");
             response.setStatus(401);
             throw new Exception("token验证失败");
         }
