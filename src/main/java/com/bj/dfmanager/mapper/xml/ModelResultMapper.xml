@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bj.dfmanager.mapper.ModelResultMapper">
+
+    <select id="queryResultList" resultType="com.bj.dfmanager.entity.ModelResult">
+        SELECT mr.*,m.MODEL_NAME,m.MODEL_DESC FROM T_MODEL_RESULT mr
+        LEFT JOIN T_MODEL m on mr.MODEL_ID = m.ID
+        WHERE 1 = 1
+        <if test="modelName != null and modelName != ''">
+            and m.MODEL_NAME like '%'||#{modelName}||'%'
+        </if>
+        <if test="warnFlag != null and warnFlag != ''">
+            and mr.WARN_FLAG = #{warnFlag}
+        </if>
+        <if test="certNo != null and certNo != ''">
+            and mr.PASSPORTNO like '%'||#{certNo}||'%'
+        </if>
+        <if test="fltno != null and fltno != ''">
+            and mr.FLTNO like '%'||#{fltno}||'%'
+        </if>
+        <if test="fltDateStart != null and fltDateStart != ''">
+            and mr.FLTNODATE &gt;= #{fltDateStart}
+        </if>
+        <if test="fltDateEnd != null and fltDateEnd != ''">
+            and mr.FLTNODATE &lt;= #{fltDateEnd}
+        </if>
+    </select>
+
+</mapper>

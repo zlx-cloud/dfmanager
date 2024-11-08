@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bj.dfmanager.mapper.RoleMenuMapper">
+
+    <insert id="roleBindMenu">
+        INSERT INTO DFMANAGER.T_ROLE_MENU (ROLE_ID,MENU_ID) VALUES
+        <foreach collection="menuList" separator="," index="index" item="item">
+            (#{roleId},#{item})
+        </foreach>
+    </insert>
+
+</mapper>

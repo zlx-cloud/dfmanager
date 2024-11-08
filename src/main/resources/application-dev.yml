@@ -1,0 +1,112 @@
+server:
+  port: 8000
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    context-path: /dfmanager
+
+spring:
+  datasource:
+    druid:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: dm.jdbc.driver.DmDriver
+      url: jdbc:dm://49.232.162.212:5236?schema=DFMANAGER&compatibleMode=mysql&characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+      username: DFMANAGER
+      password: DFMANAGER
+  redis:
+    host: 192.168.70.100
+    port: 6379
+    password: redis
+
+mybatis-plus:
+  # 驼峰转换 从数据库列名到Java属性驼峰命名的类似映射
+  map-underscore-to-camel-case: true
+  # 是否开启缓存
+  cache-enable: false
+  # xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
+  mapper-locations: classpath:com/bj/dfmanager/mapper/xml/*.xml
+  configuration:
+    # 打印sql
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+task:
+  fixedDelay: 300000
+
+hybase:
+  url: http://192.168.99.201:5555
+  username: admin
+  password: trsadmin
+  tasklogtable: F_TASK_LOG
+  tables:
+    #中国公民证件签发
+    - tableName: F_PER_CERT_CHN_ISSUE
+      tableComment: 中国公民证件签发
+      etlDate: ETLdate
+      businessDate: ISSUING_DATE
+    #外国人签证签发
+    - tableName: F_PER_CERT_FGN_VISA
+      tableComment: 外国人签证签发
+      etlDate: ETLdate
+      businessDate: VISA_DATE
+    #外籍人员常住登记
+    - tableName: F_PER_FGN_RESIDENT_REG
+      tableComment: 外籍人员常住登记
+      etlDate: ETLdate
+      businessDate: PRMT_ISSUING_DATE
+    #外国人临住
+    - tableName: F_PER_FGN_TEMP_REG
+      tableComment: 外国人临住
+      etlDate: ETLdate
+      businessDate: STAY_DATE
+    #边检案事件
+    - tableName: F_EVT_PSR_ILLEGAL
+      tableComment: 边检案事件
+      etlDate: ETLdate
+      businessDate: EDIT_DT
+    #涉外案事件
+    - tableName: F_EVT_FGN_CASE
+      tableComment: 涉外案事件
+      etlDate: ETLdate
+      businessDate: OPER_DT
+    #iAPI数据
+    - tableName: F_PER_IAPI_INFO
+      tableComment: iAPI数据
+      etlDate: LOAD_DT
+      businessDate: OPER_DT
+    #人员基本信息
+    - tableName: F_PER_BASIC_INFO
+      tableComment: 人员基本信息
+      etlDate: ETLdate
+      businessDate:
+
+dfservice:
+  prefix: http://127.0.0.1:8080
+  #刷新缓存接口
+  reflustCatch: http://127.0.0.1:8080/catch/reflustCatch
+  #指标测试接口
+  targetTest: http://127.0.0.1:8080/target/test
+  #探活接口
+  exploreUrl: http://127.0.0.1:8080/status/ping
+
+dfdispatcher:
+  #探活接口
+  exploreUrl: http://127.0.0.1:8090/status/ping
+
+dftasklogservice:
+  #探活接口
+  exploreUrl: http://127.0.0.1:8091/status/ping
+
+dfmodelservice:
+  #探活接口
+  exploreUrl: http://127.0.0.1:8092/status/ping
+
+mq:
+  host: 101.42.14.231
+  port: 5673
+  username: guest
+  password: Bj-qazxsw!@#
+  timeout: 5000
+
+kafka:
+  server: 192.168.70.100:9092
+  timeout: 5000
