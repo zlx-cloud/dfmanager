@@ -23,4 +23,7 @@ public class ModelTargetVO {
     // 编码
     private String code;
 
+    // 规则id
+    private Integer ruleId;
+
 }

@@ -2,7 +2,10 @@ package com.bj.dfmanager.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * 模型计算结果
@@ -24,18 +27,22 @@ public class ModelResult {
     private String warnFlag;
 
     @TableField("PASSPORTNO")
-    private String certNo;
+    private String passportno;
 
     @TableField("FLTNO")
     private String fltno;
 
     @TableField("FLTNODATE")
-    private String fltDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
+    private Date fltnodate;
 
     @TableField(exist = false)
     private String modelName;
 
     @TableField(exist = false)
     private String modelDesc;
+
+    @TableField("CREATE_TIME")
+    private Date createTime;
 
 }

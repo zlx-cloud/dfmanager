@@ -22,4 +22,10 @@ public interface TargetMapper extends BaseMapper<Target> {
     @Select("SELECT T.* FROM T_TARGET T WHERE T.TARGET_STATUS ='Y' AND T.ID NOT IN " +
             "(SELECT STR.TARGET_ID FROM T_SYSTEM_TARGET_REL STR WHERE STR.SYSTEM_ID = #{id}) ORDER BY T.CREATE_TIME DESC")
     List<Target> userSystemNotHaveTarget(@Param("id") Integer id);
+
+    /**
+     * 根据启停状态查询指标数量
+     */
+    @Select("SELECT COUNT(1) FROM T_TARGET WHERE TARGET_STATUS = #{targetStatus}")
+    int queryTargetCountByStatus(@Param("targetStatus") String targetStatus);
 }

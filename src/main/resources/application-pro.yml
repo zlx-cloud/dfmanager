@@ -78,6 +78,21 @@ hybase:
       tableComment: 人员基本信息
       etlDate: ETLdate
       businessDate:
+    #出入境记录
+    - tableName: F_PER_ACT_PSR_IMM_PD
+      tableComment: 出入境记录
+      etlDate: ETLdate
+      businessDate: IMM_DATE
+    #港澳台证件签发
+    - tableName: F_PER_CERT_HMT_ISSUE
+      tableComment: 港澳台证件签发
+      etlDate: ETLdate
+      businessDate: ISSUING_DATE
+    #遣返遣送
+    - tableName: F_EVT_PSR_REPAT
+      tableComment: 遣返遣送
+      etlDate: ETLdate
+      businessDate: EDIT_DT
 
 dfservice:
   prefix: http://192.168.100.142:8080

@@ -31,4 +31,8 @@ public class ModelTarget {
     @TableField("CODE")
     private String code;
 
+    // 规则ID
+    @TableField("RULE_ID")
+    private Integer ruleId;
+
 }
