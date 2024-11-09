@@ -79,6 +79,8 @@ public class TaskLogServiceImpl implements TaskLogService {
             searchWord = sb.substring(0, sb.length() - 4);
         }
 
+        log.info("查询任务日志列表,入参：" + searchWord);
+
         // 返回值
         Map<String, Object> data = new HashMap<>();
         try {
