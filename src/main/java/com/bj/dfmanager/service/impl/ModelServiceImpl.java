@@ -125,7 +125,9 @@ public class ModelServiceImpl implements ModelService {
         List<ModelTarget> modelTargetList = modelTargetMapper.selectByMap(map);
         for (ModelTarget modelTarget : modelTargetList) {
             TargetCheckRule targetCheckRule = targetCheckRuleMapper.selectById(modelTarget.getRuleId());
-            modelTarget.setRuleName(targetCheckRule.getRuleName());
+            if (null != targetCheckRule) {
+                modelTarget.setRuleName(targetCheckRule.getRuleName());
+            }
         }
         model.setModelTargetList(modelTargetList);
 
