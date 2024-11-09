@@ -28,20 +28,17 @@
     </select>
 
     <select id="modelCountTrend" resultType="java.util.Map">
-        SELECT HOUR,COUNT(1) COUNT FROM
-        (
-        SELECT TO_NUMBER (TO_CHAR (CREATE_TIME, 'hh24')) HOUR FROM T_MODEL_RESULT
-        WHERE TO_CHAR(CREATE_TIME,'YYYY-MM-DD')= CURDATE()
+        SELECT BUSI_HOUR HOUR,IFNULL(SUM(TOTAL),0) COUNT FROM T_MODEL_RESULT_COUNT
+        WHERE BUSI_DATE = TO_CHAR(TRUNC(SYSDATE),'YYYYMMDD')
         <if test="id != null and id != ''">
             AND MODEL_ID = #{id}
         </if>
-        )
-        GROUP BY HOUR ORDER BY HOUR
+        GROUP BY BUSI_HOUR ORDER BY BUSI_HOUR
     </select>
 
     <select id="modelTimeTrend" resultType="java.util.Map">
         SELECT CONCAT(A.BUSI_HOUR,A.MODEL_ID) KEY,A.BUSI_HOUR HOUR,A.MODEL_ID,B.MODEL_NAME,
-        ROUND(SUM(A.DURATION)/COUNT(1),0) VALUE
+        ROUND(IFNULL(SUM(A.DURATION),0)/COUNT(1),0) VALUE
         FROM T_MODEL_RESULT_COUNT A
         LEFT JOIN T_MODEL B ON A.MODEL_ID=B.ID
         WHERE A.BUSI_DATE = TO_CHAR(TRUNC(SYSDATE),'YYYYMMDD')

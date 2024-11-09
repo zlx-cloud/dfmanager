@@ -14,4 +14,10 @@ public interface TaskLogService {
      * 查询任务执行结果
      */
     Result queryTaskResult(String objectId);
+
+    /**
+     * 监测预警信息查询
+     */
+    Result queryMonitorWarnInfo(TaskLogSearchVO taskLogSearchVO);
+
 }

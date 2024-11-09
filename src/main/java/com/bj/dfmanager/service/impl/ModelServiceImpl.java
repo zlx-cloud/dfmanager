@@ -8,9 +8,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bj.dfmanager.entity.Model;
 import com.bj.dfmanager.entity.ModelResult;
 import com.bj.dfmanager.entity.ModelTarget;
+import com.bj.dfmanager.entity.TargetCheckRule;
 import com.bj.dfmanager.mapper.ModelMapper;
 import com.bj.dfmanager.mapper.ModelResultMapper;
 import com.bj.dfmanager.mapper.ModelTargetMapper;
+import com.bj.dfmanager.mapper.TargetCheckRuleMapper;
 import com.bj.dfmanager.service.ModelService;
 import com.bj.dfmanager.vo.common.Result;
 import com.bj.dfmanager.vo.model.*;
@@ -34,6 +36,8 @@ public class ModelServiceImpl implements ModelService {
     private ModelTargetMapper modelTargetMapper;
     @Resource
     private ModelResultMapper modelResultMapper;
+    @Resource
+    private TargetCheckRuleMapper targetCheckRuleMapper;
 
     /**
      * 查询模型列表
@@ -119,6 +123,10 @@ public class ModelServiceImpl implements ModelService {
 
         // 模型指标信息
         List<ModelTarget> modelTargetList = modelTargetMapper.selectByMap(map);
+        for (ModelTarget modelTarget : modelTargetList) {
+            TargetCheckRule targetCheckRule = targetCheckRuleMapper.selectById(modelTarget.getRuleId());
+            modelTarget.setRuleName(targetCheckRule.getRuleName());
+        }
         model.setModelTargetList(modelTargetList);
 
         return Result.success(model, "查询模型成功");

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -154,24 +153,10 @@ public class MonitorShowServiceImpl implements MonitorShowService {
         int successCount = modelResultMapper.queryCountByErrorFlag("Y");
         // 查询错误数量
         int failCount = modelResultMapper.queryCountByErrorFlag("N");
-        // 得到总数
-        int total = successCount + failCount;
-
-        // 定义正确率和错误率
-        String successRate = "0", failRate = "0";
-        // 格式化
-        DecimalFormat df = new DecimalFormat("#.00");
-        // 计算正确率和错误率
-        if (0 != total) {
-            successRate = df.format(successCount / total);
-            failRate = df.format(failCount / total);
-        }
 
         Map map = new HashMap();
         map.put("successCount", successCount);
         map.put("failCount", failCount);
-        map.put("successRate", successRate);
-        map.put("failRate", failRate);
 
         return Result.success(map, "监控接口的正确率和错误率成功");
     }

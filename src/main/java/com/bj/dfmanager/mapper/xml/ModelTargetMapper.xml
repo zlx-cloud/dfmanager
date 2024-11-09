@@ -4,9 +4,9 @@
 <mapper namespace="com.bj.dfmanager.mapper.ModelTargetMapper">
 
     <insert id="saveBatch">
-        INSERT INTO DFMANAGER.T_MODEL_TARGET (MODEL_ID,TARGET_ID,OPERATOR,VALUE_RANGE,CODE) VALUES
+        INSERT INTO DFMANAGER.T_MODEL_TARGET (MODEL_ID,TARGET_ID,OPERATOR,VALUE_RANGE,CODE,RULE_ID) VALUES
         <foreach collection="list" separator="," item="item">
-            (#{item.modelId},#{item.targetId},#{item.operator},#{item.valueRange},#{item.code})
+            (#{item.modelId},#{item.targetId},#{item.operator},#{item.valueRange},#{item.code},#{item.ruleId})
         </foreach>
     </insert>
 

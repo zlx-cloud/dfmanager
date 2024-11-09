@@ -2,7 +2,9 @@ package com.bj.dfmanager.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bj.dfmanager.entity.MonitorTaskError;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -19,25 +21,25 @@ public interface MonitorTaskErrorMapper extends BaseMapper<MonitorTaskError> {
     /**
      * 访问频次
      */
-    @Select("SELECT A.MODEL_ID,B.MODEL_NAME,SUM(A.TOTAL) COUNT FROM T_MODEL_RESULT_COUNT A " +
+    @Select("SELECT A.MODEL_ID,B.MODEL_NAME,IFNULL(SUM(A.TOTAL),0) COUNT FROM T_MODEL_RESULT_COUNT A " +
             "LEFT JOIN T_MODEL B ON A.MODEL_ID = B.ID " +
-            "WHERE TO_CHAR(A.BUSI_DATE,'YYYYMMDD') = CURDATE() " +
+            "WHERE A.BUSI_DATE = TO_CHAR(TRUNC(SYSDATE),'YYYYMMDD') " +
             "GROUP BY A.MODEL_ID,B.MODEL_NAME ORDER BY COUNT DESC,A.MODEL_ID LIMIT 10")
     List<Map<String, Object>> frequency();
 
     /**
      * 访问频次全部
      */
-    @Select("SELECT A.MODEL_ID,B.MODEL_NAME,SUM(A.TOTAL) COUNT FROM T_MODEL_RESULT_COUNT A " +
+    @Select("SELECT A.MODEL_ID,B.MODEL_NAME,IFNULL(SUM(A.TOTAL),0) COUNT FROM T_MODEL_RESULT_COUNT A " +
             "LEFT JOIN T_MODEL B ON A.MODEL_ID = B.ID " +
-            "WHERE TO_CHAR(A.BUSI_DATE,'YYYYMMDD') = CURDATE() " +
+            "WHERE A.BUSI_DATE = TO_CHAR(TRUNC(SYSDATE),'YYYYMMDD') " +
             "GROUP BY A.MODEL_ID,B.MODEL_NAME ORDER BY COUNT DESC,A.MODEL_ID")
     List<Map<String, Object>> frequencyAll();
 
     /**
      * 响应时长
      */
-    @Select("SELECT A.MODEL_ID,B.MODEL_NAME,ROUND(SUM(A.DURATION)/COUNT(1),0) VALUE " +
+    @Select("SELECT A.MODEL_ID,B.MODEL_NAME,ROUND(IFNULL(SUM(A.DURATION),0)/COUNT(1),0) VALUE " +
             "FROM T_MODEL_RESULT_COUNT A LEFT JOIN T_MODEL B ON A.MODEL_ID = B.ID " +
             "WHERE A.BUSI_DATE = TO_CHAR(TRUNC(SYSDATE),'YYYYMMDD') " +
             "GROUP BY A.MODEL_ID,B.MODEL_NAME ORDER BY VALUE DESC,A.MODEL_ID LIMIT 10")
@@ -46,7 +48,7 @@ public interface MonitorTaskErrorMapper extends BaseMapper<MonitorTaskError> {
     /**
      * 响应时长全部
      */
-    @Select("SELECT A.MODEL_ID,B.MODEL_NAME,ROUND(SUM(A.DURATION)/COUNT(1),0) VALUE " +
+    @Select("SELECT A.MODEL_ID,B.MODEL_NAME,ROUND(IFNULL(SUM(A.DURATION),0)/COUNT(1),0) VALUE " +
             "FROM T_MODEL_RESULT_COUNT A LEFT JOIN T_MODEL B ON A.MODEL_ID = B.ID " +
             "WHERE A.BUSI_DATE = TO_CHAR(TRUNC(SYSDATE),'YYYYMMDD') " +
             "GROUP BY A.MODEL_ID,B.MODEL_NAME ORDER BY VALUE DESC,A.MODEL_ID")
@@ -57,5 +59,11 @@ public interface MonitorTaskErrorMapper extends BaseMapper<MonitorTaskError> {
      */
     @Select("SELECT * FROM T_MONITOR_TASK_ERROR WHERE STASTUS = '0' ORDER BY ERROR_TIME DESC LIMIT 5")
     List<MonitorTaskError> exceptionInfoWarn();
+
+    /**
+     * 更新已读状态
+     */
+    @Update("UPDATE T_MONITOR_TASK_ERROR SET STASTUS = '1' WHERE ID = #{id}")
+    void updateReadStatus(@Param("id") int id);
 
 }

@@ -34,4 +34,9 @@ public interface MonitorInfoSummaryService {
      */
     Result exceptionInfoWarn();
 
+    /**
+     * 更新已读状态
+     */
+    Result updateReadStatus(Integer id);
+
 }

@@ -1,6 +1,8 @@
 package com.bj.dfmanager.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -13,6 +15,9 @@ import java.util.Date;
 @Data
 @TableName(value = "DFMANAGER.T_MONITOR_TASK_ERROR")
 public class MonitorTaskError {
+
+    @TableId(type = IdType.AUTO)
+    private Integer id;
 
     // 任务编码
     @TableField("TASK_CODE")

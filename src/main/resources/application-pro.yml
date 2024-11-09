@@ -72,12 +72,12 @@ hybase:
     - tableName: F_PER_IAPI_INFO
       tableComment: iAPI数据
       etlDate: LOAD_DT
-      businessDate: OPER_DT
+      businessDate: CREATETIME
     #人员基本信息
     - tableName: F_PER_BASIC_INFO
       tableComment: 人员基本信息
       etlDate: ETLdate
-      businessDate:
+      businessDate: ETLdate
     #出入境记录
     - tableName: F_PER_ACT_PSR_IMM_PD
       tableComment: 出入境记录

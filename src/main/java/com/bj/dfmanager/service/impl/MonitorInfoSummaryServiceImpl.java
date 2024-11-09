@@ -48,13 +48,16 @@ public class MonitorInfoSummaryServiceImpl implements MonitorInfoSummaryService 
         return Result.success(list, "查询响应时长全部成功");
     }
 
-    /**
-     * 异常信息预警
-     */
     @Override
     public Result exceptionInfoWarn() {
         List<MonitorTaskError> list = monitorTaskErrorMapper.exceptionInfoWarn();
         return Result.success(list, "查询异常信息预警成功");
+    }
+
+    @Override
+    public Result updateReadStatus(Integer id) {
+        monitorTaskErrorMapper.updateReadStatus(id);
+        return Result.success(null, "更新已读状态成功");
     }
 
 }

@@ -32,13 +32,13 @@ public interface ModelResultMapper extends BaseMapper<ModelResult> {
     /**
      * 当日服务次数
      */
-    @Select("SELECT COUNT(1) FROM T_MODEL_RESULT WHERE TO_CHAR(CREATE_TIME,'YYYY-MM-DD') = CURDATE()")
+    @Select("SELECT IFNULL(SUM(TOTAL),0) FROM T_MODEL_RESULT_COUNT WHERE BUSI_DATE = TO_CHAR(TRUNC(SYSDATE),'YYYYMMDD')")
     int todayServiceCount();
 
     /**
      * 特定模型当日服务次数
      */
-    @Select("SELECT COUNT(1) FROM T_MODEL_RESULT WHERE TO_CHAR(CREATE_TIME,'YYYY-MM-DD') = CURDATE() " +
+    @Select("SELECT IFNULL(SUM(TOTAL),0) FROM T_MODEL_RESULT_COUNT WHERE BUSI_DATE = TO_CHAR(TRUNC(SYSDATE),'YYYYMMDD') " +
             "AND MODEL_ID = #{id}")
     int modelTodayServiceCount(@Param("id") String id);
 
@@ -55,7 +55,7 @@ public interface ModelResultMapper extends BaseMapper<ModelResult> {
     /**
      * 监控接口的正确率和错误率
      */
-    @Select("SELECT SUM(TOTAL) FROM T_MODEL_RESULT_COUNT " +
+    @Select("SELECT IFNULL(SUM(TOTAL),0) FROM T_MODEL_RESULT_COUNT " +
             "WHERE BUSI_DATE = TO_CHAR(TRUNC(SYSDATE),'YYYYMMDD') AND ERROR_FLAG = #{errorFlag}")
     int queryCountByErrorFlag(@Param("errorFlag") String errorFlag);
 

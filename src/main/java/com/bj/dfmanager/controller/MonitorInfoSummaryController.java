@@ -3,11 +3,9 @@ package com.bj.dfmanager.controller;
 import com.alibaba.fastjson2.JSON;
 import com.bj.dfmanager.service.MonitorInfoSummaryService;
 import com.bj.dfmanager.vo.common.Result;
+import com.bj.dfmanager.vo.model.ModelVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -88,5 +86,15 @@ public class MonitorInfoSummaryController {
         return result;
     }
 
+    /**
+     * 更新已读状态
+     */
+    @PostMapping("/updateReadStatus")
+    @ResponseBody
+    public Result updateReadStatus(@RequestBody ModelVO vo) {
+        Result result = monitorInfoSummaryService.updateReadStatus(vo.getId());
+        log.info("更新已读状态，返回：{}", JSON.toJSONString(result));
+        return result;
+    }
 
 }

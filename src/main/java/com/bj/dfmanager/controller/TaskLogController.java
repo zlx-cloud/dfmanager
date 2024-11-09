@@ -44,4 +44,16 @@ public class TaskLogController {
         return result;
     }
 
+    /**
+     * 监测预警信息查询
+     */
+    @PostMapping("/queryMonitorWarnInfo")
+    @ResponseBody
+    public Result queryMonitorWarnInfo(@RequestBody TaskLogSearchVO taskLogSearchVO) {
+        log.info("监测预警信息查询，入参：{}", JSON.toJSONString(taskLogSearchVO));
+        Result result = taskLogService.queryMonitorWarnInfo(taskLogSearchVO);
+        log.info("监测预警信息查询，返回：{}", JSON.toJSONString(result));
+        return result;
+    }
+
 }

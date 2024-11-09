@@ -35,4 +35,8 @@ public class ModelTarget {
     @TableField("RULE_ID")
     private Integer ruleId;
 
+    // 规则名称
+    @TableField(exist = false)
+    private String ruleName;
+
 }
