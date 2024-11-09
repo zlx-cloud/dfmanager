@@ -172,6 +172,8 @@ public class TaskLogServiceImpl implements TaskLogService {
             searchWord = sb.substring(0, sb.length() - 4);
         }
 
+        log.info("监测预警信息查询,入参：" + searchWord);
+
         // 返回值
         Map<String, Object> data = new HashMap<>();
         try {
