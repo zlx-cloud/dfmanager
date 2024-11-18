@@ -41,4 +41,9 @@ public interface ModelService {
      */
     Result queryResultDetail(ModelSearchVO modelSearchVO);
 
+    /**
+     * 查询等级分类列表
+     */
+    Result queryGradeList();
+
 }

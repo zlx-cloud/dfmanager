@@ -115,18 +115,16 @@ public class ModelDemandServiceImpl implements ModelDemandService {
     public Result queryMyList(ModelDemandSearchVO modelDemandSearchVO) {
         LambdaQueryWrapper<ModelDemand> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(StringUtils.isNotEmpty(modelDemandSearchVO.getModelName()),
-                ModelDemand::getModelName, modelDemandSearchVO.getModelName());
-        queryWrapper.eq(StringUtils.isNotEmpty(modelDemandSearchVO.getModelType()),
-                ModelDemand::getModelType, modelDemandSearchVO.getModelType());
-        queryWrapper.eq(StringUtils.isNotEmpty(modelDemandSearchVO.getUseScope()),
-                ModelDemand::getUseScope, modelDemandSearchVO.getUseScope());
-        queryWrapper.eq(StringUtils.isNotEmpty(modelDemandSearchVO.getDemandUnit()),
-                ModelDemand::getDemandUnit, modelDemandSearchVO.getDemandUnit());
-        queryWrapper.eq(StringUtils.isNotEmpty(modelDemandSearchVO.getDeveloper()),
-                ModelDemand::getDeveloper, JwtTokenUtils.getCurrentUser().getUserName());
-        queryWrapper.eq(StringUtils.isNotEmpty(modelDemandSearchVO.getDemandStatus()),
-                ModelDemand::getDemandStatus, modelDemandSearchVO.getDemandStatus());
-        queryWrapper.orderByDesc(ModelDemand::getCreateTime);
+                ModelDemand::getModelName, modelDemandSearchVO.getModelName())
+                .eq(StringUtils.isNotEmpty(modelDemandSearchVO.getModelType()),
+                        ModelDemand::getModelType, modelDemandSearchVO.getModelType())
+                .eq(StringUtils.isNotEmpty(modelDemandSearchVO.getUseScope()),
+                        ModelDemand::getUseScope, modelDemandSearchVO.getUseScope())
+                .eq(StringUtils.isNotEmpty(modelDemandSearchVO.getDemandUnit()),
+                        ModelDemand::getDemandUnit, modelDemandSearchVO.getDemandUnit())
+                .eq(StringUtils.isNotEmpty(modelDemandSearchVO.getDeveloper()),
+                        ModelDemand::getDeveloper, JwtTokenUtils.getCurrentUser().getUserId())
+                .orderByDesc(ModelDemand::getCreateTime);
         IPage<ModelDemand> page = modelDemandMapper.selectPage(new Page<>(modelDemandSearchVO.getCurrent(),
                 modelDemandSearchVO.getSize()), queryWrapper);
         return Result.success(page, "查看分配给自己的模型需求列表成功");

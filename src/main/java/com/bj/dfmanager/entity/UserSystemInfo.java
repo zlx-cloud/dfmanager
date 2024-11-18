@@ -65,4 +65,8 @@ public class UserSystemInfo {
     @TableField("STATUS")
     private String status;
 
+    // 身份证号
+    @TableField("CERT_NO")
+    private String certNo;
+
 }

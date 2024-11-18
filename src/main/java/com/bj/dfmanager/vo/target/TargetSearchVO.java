@@ -26,4 +26,7 @@ public class TargetSearchVO extends PageVO {
     // 指标状态
     private String targetStatus;
 
+    // 请求方法
+    private String requestMethod;
+
 }

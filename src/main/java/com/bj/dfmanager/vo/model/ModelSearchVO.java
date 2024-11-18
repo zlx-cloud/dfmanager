@@ -33,5 +33,4 @@ public class ModelSearchVO extends PageVO {
     // 航班截止时间
     private String fltDateEnd;
 
-
 }

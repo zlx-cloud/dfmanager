@@ -48,4 +48,7 @@ public class ModelVO {
     // 预警状态
     private String warnFlag;
 
+    // 等级分类ID
+    private Integer gradeId;
+
 }

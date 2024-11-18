@@ -46,6 +46,8 @@ public class TargetServiceImpl implements TargetService {
                 Target::getTargetCode, targetSearchVO.getTargetCode());
         queryWrapper.like(StringUtils.isNotEmpty(targetSearchVO.getTargetName()),
                 Target::getTargetName, targetSearchVO.getTargetName());
+        queryWrapper.like(StringUtils.isNotEmpty(targetSearchVO.getRequestMethod()),
+                Target::getRequestMethod, targetSearchVO.getRequestMethod());
         queryWrapper.eq(StringUtils.isNotEmpty(targetSearchVO.getAsync()),
                 Target::getAsync, targetSearchVO.getAsync());
         queryWrapper.eq(StringUtils.isNotEmpty(targetSearchVO.getApplicableScope()),

@@ -1,6 +1,7 @@
 package com.bj.dfmanager.service;
 
 import com.bj.dfmanager.vo.common.Result;
+import com.bj.dfmanager.vo.monitor.MonitorDiskVO;
 
 public interface MonitorShowService {
 
@@ -58,5 +59,10 @@ public interface MonitorShowService {
      * 磁盘监控
      */
     Result diskMonitor();
+
+    /**
+     * 更新磁盘监控
+     */
+    Result updateDiskMonitor(MonitorDiskVO vo);
 
 }

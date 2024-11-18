@@ -1,6 +1,7 @@
 package com.bj.dfmanager.task;
 
 import com.bj.dfmanager.mapper.MonitorTaskMapper;
+import com.bj.dfmanager.service.MonitorTaskErrorService;
 import com.trs.hybase.client.TRSConnection;
 import com.trs.hybase.client.params.ConnectParams;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,8 @@ public class DbMonitorTasks {
 
     @Resource
     private MonitorTaskMapper monitorTaskMapper;
+    @Resource
+    private MonitorTaskErrorService monitorTaskErrorService;
 
     private TRSConnection trsConn = null;
 
@@ -61,6 +64,7 @@ public class DbMonitorTasks {
         } catch (Exception e) {
             e.printStackTrace();
             taskTime = null;
+            monitorTaskErrorService.addMonitorTaskError("hybase", "海贝");
         } finally {
             closeTrsConn();
         }
@@ -77,8 +81,8 @@ public class DbMonitorTasks {
             monitorTaskMapper.updateMonitorInfo("1", null, "dm");
         } catch (Exception e) {
             e.printStackTrace();
+            // monitorTaskErrorService.addMonitorTaskError("dm", "达梦数据库");
         }
-
     }
 
 }

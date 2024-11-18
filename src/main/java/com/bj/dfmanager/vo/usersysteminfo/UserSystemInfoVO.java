@@ -39,6 +39,9 @@ public class UserSystemInfoVO {
     // 状态
     private String status;
 
+    // 身份证号
+    private String certNo;
+
     // 服务
     private List<Integer> serviceList;
 

@@ -14,4 +14,9 @@ public interface BgMonitorService {
      */
     Result dataMonitor();
 
+    /**
+     * 服务节点监控列表
+     */
+    Result serviceNodeMonitorList();
+
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.bj.dfmanager.service.MonitorShowService;
 import com.bj.dfmanager.vo.common.Result;
 import com.bj.dfmanager.vo.model.ModelSearchVO;
+import com.bj.dfmanager.vo.monitor.MonitorDiskVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -144,5 +145,15 @@ public class MonitorShowController {
         return result;
     }
 
+    /**
+     * 更新磁盘监控
+     */
+    @PostMapping("/updateDiskMonitor")
+    @ResponseBody
+    public Result updateDiskMonitor(@RequestBody MonitorDiskVO vo) {
+        Result result = monitorShowService.updateDiskMonitor(vo);
+        log.info("更新磁盘监控，返回：{}", JSON.toJSONString(result));
+        return result;
+    }
 
 }

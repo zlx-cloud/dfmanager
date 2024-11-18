@@ -34,6 +34,17 @@ public class ModelController {
     }
 
     /**
+     * 查询等级分类列表
+     */
+    @PostMapping("/queryGradeList")
+    @ResponseBody
+    public Result queryGradeList() {
+        Result result = modelService.queryGradeList();
+        log.info("查询等级分类列表，返回：{}", JSON.toJSONString(result));
+        return result;
+    }
+
+    /**
      * 新增/修改模型
      */
     @PostMapping("/addOrUpdate")

@@ -1,6 +1,7 @@
 package com.bj.dfmanager.task;
 
 import com.bj.dfmanager.mapper.MonitorTaskMapper;
+import com.bj.dfmanager.service.MonitorTaskErrorService;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,8 @@ public class UnitMonitorTasks {
     private RedisTemplate<String, Object> redisTemplate;
     @Resource
     private MonitorTaskMapper monitorTaskMapper;
+    @Resource
+    private MonitorTaskErrorService monitorTaskErrorService;
 
     /**
      * redis监控
@@ -55,6 +58,7 @@ public class UnitMonitorTasks {
             monitorStatus = "1";
         } catch (Exception e) {
             e.printStackTrace();
+            monitorTaskErrorService.addMonitorTaskError("redis", "Redis");
         }
         monitorTaskMapper.updateMonitorInfo(monitorStatus, null, "redis");
     }
@@ -80,6 +84,7 @@ public class UnitMonitorTasks {
             monitorStatus = "1";
         } catch (Exception e) {
             e.printStackTrace();
+            monitorTaskErrorService.addMonitorTaskError("kafka", "Kafka");
         } finally {
             adminClient.close();
         }
@@ -110,6 +115,7 @@ public class UnitMonitorTasks {
             connection.close();
         } catch (Exception e) {
             e.printStackTrace();
+            monitorTaskErrorService.addMonitorTaskError("rabbitmq", "RabbitMQ");
         }
         monitorTaskMapper.updateMonitorInfo(monitorStatus, null, "rabbitmq");
     }

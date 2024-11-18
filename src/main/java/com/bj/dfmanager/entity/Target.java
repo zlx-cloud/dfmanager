@@ -73,4 +73,8 @@ public class Target {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date updateTime;
 
+    // 请求方法
+    @TableField("REQUEST_METHOD")
+    private String requestMethod;
+
 }

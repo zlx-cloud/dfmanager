@@ -56,7 +56,7 @@ public class TaskLogServiceImpl implements TaskLogService {
         // 按任务开始时间降序排序
         param.setSortMethod("-START_DT");
         // 设置检索结果返回字段列表
-        param.setReadColumns("OBJECTID;DATA_TYPE;DATA_ID;START_DT;FIN_DT;STATUS;ERROR_MSG");
+        param.setReadColumns("OBJECTID;DATA_TYPE;DATA_ID;START_DT;FIN_DT;STATUS;ERROR_MSG;PARAMS;RESP_TIME;URL");
 
         // 检索条件
         StringBuffer sb = new StringBuffer();
@@ -150,7 +150,7 @@ public class TaskLogServiceImpl implements TaskLogService {
         // 按任务开始时间降序排序
         param.setSortMethod("-START_DT");
         // 设置检索结果返回字段列表
-        param.setReadColumns("OBJECTID;DATA_TYPE;DATA_ID;START_DT;FIN_DT;STATUS;ERROR_MSG");
+        param.setReadColumns("OBJECTID;DATA_TYPE;DATA_ID;START_DT;FIN_DT;STATUS;ERROR_MSG;PARAMS;RESP_TIME;URL");
 
         // 检索条件
         StringBuffer sb = new StringBuffer();

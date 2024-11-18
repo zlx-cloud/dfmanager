@@ -3,4 +3,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bj.dfmanager.mapper.ModelMapper">
 
+    <select id="queryList" resultType="com.bj.dfmanager.entity.Model">
+        SELECT m.*,mg.GRADE AS GRADE_ID,tkv.VALUE1 AS GRADE_NAME,u.REAL_NAME FROM DFMANAGER.T_MODEL m
+        LEFT JOIN DFMANAGER.T_MODEL_GRADE mg on m.ID = mg.MODEL_ID
+        LEFT JOIN (SELECT TO_NUMBER(KEY) AS KEY,VALUE1 FROM DFMANAGER.F_TASK_KEY_VALUE WHERE TYPE='DJFL') tkv
+            ON tkv.KEY = mg.GRADE
+        LEFT JOIN DFMANAGER.T_USER u ON u.USER_ID = m.USER_ID
+        <if test="modelName != null and modelName != ''">
+            and m.MODEL_NAME like '%'||#{modelName}||'%'
+        </if>
+        <if test="modelStatus != null and modelStatus != ''">
+            and m.MODEL_STATUS = #{modelStatus}
+        </if>
+    </select>
+
 </mapper>

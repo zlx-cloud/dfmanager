@@ -4,6 +4,7 @@ import com.bj.dfmanager.vo.common.PostResponseVO;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.Socket;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -109,6 +110,14 @@ public class HttpUtils {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static boolean isPortOpen(String host, int port) {
+        try (Socket socket = new Socket(host, port)) {
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 

@@ -4,8 +4,8 @@
 <mapper namespace="com.bj.dfmanager.mapper.ModelResultMapper">
 
     <select id="queryResultList" resultType="com.bj.dfmanager.entity.ModelResult">
-        SELECT mr.*,m.MODEL_NAME,m.MODEL_DESC FROM T_MODEL_RESULT mr
-        LEFT JOIN T_MODEL m on mr.MODEL_ID = m.ID
+        SELECT mr.*,m.MODEL_NAME,m.MODEL_DESC FROM DFMANAGER.T_MODEL_RESULT mr
+        LEFT JOIN DFMANAGER.T_MODEL m on mr.MODEL_ID = m.ID
         WHERE 1 = 1
         <if test="modelName != null and modelName != ''">
             and m.MODEL_NAME like '%'||#{modelName}||'%'

@@ -74,4 +74,16 @@ public class Model {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date updateTime;
 
+    @TableField(exist = false)
+    private String gradeId;
+
+    @TableField(exist = false)
+    private String gradeName;
+
+    @TableField(exist = false)
+    private String realName;
+
+    @TableField("USER_ID")
+    private Integer userId;
+
 }

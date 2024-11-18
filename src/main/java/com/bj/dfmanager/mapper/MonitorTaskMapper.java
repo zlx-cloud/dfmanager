@@ -28,7 +28,13 @@ public interface MonitorTaskMapper extends BaseMapper<MonitorTask> {
     /**
      * 服务节点监控
      */
-    @Select("SELECT * FROM DFMANAGER.T_MONITOR_TASK ORDER BY SORT")
+    @Select("SELECT * FROM DFMANAGER.T_MONITOR_TASK WHERE TYPE = 'PICTURE' ORDER BY SORT")
     List<MonitorTask> serviceNodeMonitor();
+
+    /**
+     * 服务节点监控列表
+     */
+    @Select("SELECT * FROM DFMANAGER.T_MONITOR_TASK ORDER BY SORT")
+    List<MonitorTask> serviceNodeMonitorList();
 
 }

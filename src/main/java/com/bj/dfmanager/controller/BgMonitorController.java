@@ -44,4 +44,15 @@ public class BgMonitorController {
         return result;
     }
 
+    /**
+     * 服务节点监控列表
+     */
+    @PostMapping("/serviceNodeMonitorList")
+    @ResponseBody
+    public Result serviceNodeMonitorList() {
+        Result result = bgMonitorService.serviceNodeMonitorList();
+        log.info("服务节点监控列表，返回：{}", JSON.toJSONString(result));
+        return result;
+    }
+
 }

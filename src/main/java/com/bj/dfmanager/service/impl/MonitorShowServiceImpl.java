@@ -5,9 +5,11 @@ import com.bj.dfmanager.entity.Model;
 import com.bj.dfmanager.entity.Target;
 import com.bj.dfmanager.mapper.ModelMapper;
 import com.bj.dfmanager.mapper.ModelResultMapper;
+import com.bj.dfmanager.mapper.MonitorDiskMapper;
 import com.bj.dfmanager.mapper.TargetMapper;
 import com.bj.dfmanager.service.MonitorShowService;
 import com.bj.dfmanager.vo.common.Result;
+import com.bj.dfmanager.vo.monitor.MonitorDiskVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,8 @@ public class MonitorShowServiceImpl implements MonitorShowService {
     private ModelMapper modelMapper;
     @Resource
     private ModelResultMapper modelResultMapper;
+    @Resource
+    private MonitorDiskMapper monitorDiskMapper;
 
     @Override
     public Result startTargetCount() {
@@ -167,5 +171,10 @@ public class MonitorShowServiceImpl implements MonitorShowService {
         return Result.success(list, "查询磁盘监控成功");
     }
 
+    @Override
+    public Result updateDiskMonitor(MonitorDiskVO vo) {
+        monitorDiskMapper.updateDiskMonitor(vo.getIp(), vo.getTotal(), vo.getUsed(), vo.getFree());
+        return null;
+    }
 
 }

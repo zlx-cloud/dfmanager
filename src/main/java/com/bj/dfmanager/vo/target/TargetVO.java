@@ -56,4 +56,7 @@ public class TargetVO {
 
     private String gender;
 
+    // 请求方法
+    private String requestMethod;
+
 }

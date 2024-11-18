@@ -39,4 +39,13 @@ public class MonitorTask {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date updateTime;
 
+    @TableField("IP")
+    private String ip;
+
+    @TableField("PORT")
+    private Integer port;
+
+    @TableField("TYPE")
+    private String type;
+
 }

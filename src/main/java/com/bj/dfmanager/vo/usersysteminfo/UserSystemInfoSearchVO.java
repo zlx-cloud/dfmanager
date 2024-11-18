@@ -32,4 +32,7 @@ public class UserSystemInfoSearchVO extends PageVO {
     // 状态
     private String status;
 
+    // 身份证号
+    private String certNo;
+
 }

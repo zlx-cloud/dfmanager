@@ -125,3 +125,29 @@ mq:
 kafka:
   server: 192.168.100.142:9092
   timeout: 5000
+
+#142新
+dfqueryservice:
+  ip: 192.168.100.142
+  port: 8181
+
+#141
+dfmanager141:
+  ip: 192.168.100.141
+  port: 5236
+dataqueryservice141:
+  ip: 192.168.100.141
+  port: 8090
+dfqueryservice141:
+  ip: 192.168.100.141
+  port: 8181
+
+#143新
+dftasklogservice143:
+  exploreUrl: http://192.168.100.143:8091/status/ping
+dfdispatcher143:
+  exploreUrl: http://192.168.100.143:8090/status/ping
+dfmodelservice143:
+  exploreUrl: http://192.168.100.143:8092/status/ping
+dfservice143:
+  exploreUrl: http://192.168.100.143:8080/status/ping

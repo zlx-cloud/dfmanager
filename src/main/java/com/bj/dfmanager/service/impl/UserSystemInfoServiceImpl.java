@@ -57,6 +57,8 @@ public class UserSystemInfoServiceImpl implements UserSystemInfoService {
                 UserSystemInfo::getContactUser, userSystemInfoSearchVO.getContactUser());
         queryWrapper.like(StringUtils.isNotEmpty(userSystemInfoSearchVO.getTelInfo()),
                 UserSystemInfo::getTelInfo, userSystemInfoSearchVO.getTelInfo());
+        queryWrapper.like(StringUtils.isNotEmpty(userSystemInfoSearchVO.getCertNo()),
+                UserSystemInfo::getCertNo, userSystemInfoSearchVO.getCertNo());
         queryWrapper.eq(StringUtils.isNotEmpty(userSystemInfoSearchVO.getStatus()),
                 UserSystemInfo::getStatus, userSystemInfoSearchVO.getStatus());
         queryWrapper.orderByDesc(UserSystemInfo::getCreateTime);

@@ -125,4 +125,10 @@ public class BgMonitorServiceImpl implements BgMonitorService {
         return map;
     }
 
+    @Override
+    public Result serviceNodeMonitorList() {
+        List<MonitorTask> list = monitorTaskMapper.serviceNodeMonitorList();
+        return Result.success(list, "查询服务节点监控信息列表成功");
+    }
+
 }

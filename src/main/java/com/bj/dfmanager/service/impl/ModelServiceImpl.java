@@ -3,19 +3,15 @@ package com.bj.dfmanager.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bj.dfmanager.entity.Model;
-import com.bj.dfmanager.entity.ModelResult;
-import com.bj.dfmanager.entity.ModelTarget;
-import com.bj.dfmanager.entity.TargetCheckRule;
-import com.bj.dfmanager.mapper.ModelMapper;
-import com.bj.dfmanager.mapper.ModelResultMapper;
-import com.bj.dfmanager.mapper.ModelTargetMapper;
-import com.bj.dfmanager.mapper.TargetCheckRuleMapper;
+import com.bj.dfmanager.entity.*;
+import com.bj.dfmanager.mapper.*;
 import com.bj.dfmanager.service.ModelService;
+import com.bj.dfmanager.util.JwtTokenUtils;
 import com.bj.dfmanager.vo.common.Result;
-import com.bj.dfmanager.vo.model.*;
+import com.bj.dfmanager.vo.model.ModelSearchVO;
+import com.bj.dfmanager.vo.model.ModelTargetVO;
+import com.bj.dfmanager.vo.model.ModelVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
@@ -38,20 +34,19 @@ public class ModelServiceImpl implements ModelService {
     private ModelResultMapper modelResultMapper;
     @Resource
     private TargetCheckRuleMapper targetCheckRuleMapper;
+    @Resource
+    private TaskKeyValueMapper taskKeyValueMapper;
+    @Resource
+    private ModelGradeMapper modelGradeMapper;
 
     /**
      * 查询模型列表
      */
     @Override
     public Result queryList(ModelSearchVO modelSearchVO) {
-        LambdaQueryWrapper<Model> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotEmpty(modelSearchVO.getModelName()),
-                Model::getModelName, modelSearchVO.getModelName());
-        queryWrapper.eq(StringUtils.isNotEmpty(modelSearchVO.getModelStatus()),
-                Model::getModelStatus, modelSearchVO.getModelStatus());
-        queryWrapper.orderByDesc(Model::getCreateTime);
-        IPage<Model> page = modelMapper.selectPage(new Page<>(modelSearchVO.getCurrent(),
-                modelSearchVO.getSize()), queryWrapper);
+        IPage<Model> page = modelMapper.queryList(modelSearchVO.getModelName(),
+                modelSearchVO.getModelStatus(), new Page<>(modelSearchVO.getCurrent(),
+                        modelSearchVO.getSize()));
         return Result.success(page, "查询模型列表成功");
     }
 
@@ -69,6 +64,7 @@ public class ModelServiceImpl implements ModelService {
             BeanUtils.copyProperties(modelVO, model);
             // id不存在为新增，否则为修改
             if (null == model.getId()) {
+                model.setUserId(JwtTokenUtils.getCurrentUser().getUserId());
                 model.setCreateTime(new Date());
                 model.setModelStatus("N");
                 num = modelMapper.insert(model);
@@ -85,6 +81,9 @@ public class ModelServiceImpl implements ModelService {
 
                     // 修改前删除模型指标
                     modelTargetMapper.deleteByMap(map);
+
+                    // 修改前删除模型等级分类
+                    modelGradeMapper.deleteByMap(map);
                 }
 
                 // 插入模型指标
@@ -98,6 +97,12 @@ public class ModelServiceImpl implements ModelService {
                     }
                     modelTargetMapper.saveBatch(modelTargetList);
                 }
+
+                // 插入模型等级分类
+                ModelGrade modelGrade = new ModelGrade();
+                modelGrade.setModelId(model.getId());
+                modelGrade.setGrade(modelVO.getGradeId());
+                modelGradeMapper.insert(modelGrade);
 
                 return Result.success(null, "操作成功");
             } else {
@@ -116,7 +121,7 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public Result queryById(Integer id) {
         // 主表信息
-        Model model = modelMapper.selectById(id);
+        Model model = modelMapper.selectModelById(id);
 
         Map map = new HashMap<>();
         map.put("MODEL_ID", id);
@@ -148,6 +153,9 @@ public class ModelServiceImpl implements ModelService {
 
                 // 删除模型指标
                 modelTargetMapper.deleteByMap(map);
+
+                // 删除模型等级分类
+                modelGradeMapper.deleteByMap(map);
 
                 return Result.success(null, "删除模型成功");
             } else {
@@ -197,5 +205,15 @@ public class ModelServiceImpl implements ModelService {
         return Result.success(resultDetail, "查询模型结果详情成功");
     }
 
+    /**
+     * 查询等级分类列表
+     */
+    @Override
+    public Result queryGradeList() {
+        LambdaQueryWrapper<TaskKeyValue> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(TaskKeyValue::getType, "DJFL");
+        List<TaskKeyValue> list = taskKeyValueMapper.selectList(queryWrapper);
+        return Result.success(list, "查询等级分类列表成功");
+    }
 
 }
