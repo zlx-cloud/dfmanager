@@ -95,7 +95,7 @@ hybase:
       businessDate: EDIT_DT
 
 dfservice:
-  prefix: http://192.168.100.142:8080
+  prefix: http://192.168.100.143:9000
   #刷新缓存接口
   reflustCatch: http://192.168.100.142:8080/catch/reflustCatch
   #指标测试接口

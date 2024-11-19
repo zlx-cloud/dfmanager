@@ -14,10 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -56,7 +55,7 @@ public class TaskLogServiceImpl implements TaskLogService {
         // 按任务开始时间降序排序
         param.setSortMethod("-START_DT");
         // 设置检索结果返回字段列表
-        param.setReadColumns("OBJECTID;DATA_TYPE;DATA_ID;START_DT;FIN_DT;STATUS;ERROR_MSG;PARAMS;RESP_TIME;URL");
+        param.setReadColumns("OBJECTID;DATA_TYPE;DATA_ID;START_DT;FIN_DT;STATUS;ERROR_MSG;PARAMS;URL");
 
         // 检索条件
         StringBuffer sb = new StringBuffer();
@@ -96,6 +95,13 @@ public class TaskLogServiceImpl implements TaskLogService {
                 map.put("dataId", tr.getString("DATA_ID"));
                 map.put("startDt", tr.getString("START_DT"));
                 map.put("finDt", tr.getString("FIN_DT"));
+                if (StringUtils.isNotEmpty(tr.getString("START_DT")) && StringUtils.isNotEmpty(tr.getString("FIN_DT"))) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                    Date start = sdf.parse(tr.getString("START_DT"));
+                    Date end = sdf.parse(tr.getString("FIN_DT"));
+                    long respTime = (end.getTime() - start.getTime()) / 1000;
+                    map.put("respTime", respTime);
+                }
                 map.put("status", tr.getString("STATUS"));
                 map.put("errorMsg", tr.getString("ERROR_MSG"));
                 records.add(map);
@@ -107,7 +113,7 @@ public class TaskLogServiceImpl implements TaskLogService {
             data.put("current", taskLogSearchVO.getCurrent());
             data.put("pages", (int) hitsNum % taskLogSearchVO.getSize() == 0 ?
                     (int) hitsNum % taskLogSearchVO.getSize() : (int) hitsNum % taskLogSearchVO.getSize() + 1);
-        } catch (TRSException e) {
+        } catch (TRSException | ParseException e) {
             e.printStackTrace();
         } finally {
             closeTrsConn();
@@ -150,7 +156,7 @@ public class TaskLogServiceImpl implements TaskLogService {
         // 按任务开始时间降序排序
         param.setSortMethod("-START_DT");
         // 设置检索结果返回字段列表
-        param.setReadColumns("OBJECTID;DATA_TYPE;DATA_ID;START_DT;FIN_DT;STATUS;ERROR_MSG;PARAMS;RESP_TIME;URL");
+        param.setReadColumns("OBJECTID;DATA_TYPE;DATA_ID;START_DT;FIN_DT;STATUS;ERROR_MSG;PARAMS;URL");
 
         // 检索条件
         StringBuffer sb = new StringBuffer();
@@ -191,6 +197,13 @@ public class TaskLogServiceImpl implements TaskLogService {
                 map.put("dataId", tr.getString("DATA_ID"));
                 map.put("startDt", tr.getString("START_DT"));
                 map.put("finDt", tr.getString("FIN_DT"));
+                if (StringUtils.isNotEmpty(tr.getString("START_DT")) && StringUtils.isNotEmpty(tr.getString("FIN_DT"))) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                    Date start = sdf.parse(tr.getString("START_DT"));
+                    Date end = sdf.parse(tr.getString("FIN_DT"));
+                    long respTime = (end.getTime() - start.getTime()) / 1000;
+                    map.put("respTime", respTime);
+                }
                 map.put("status", tr.getString("STATUS"));
                 map.put("errorMsg", tr.getString("ERROR_MSG"));
                 records.add(map);
@@ -202,7 +215,7 @@ public class TaskLogServiceImpl implements TaskLogService {
             data.put("current", taskLogSearchVO.getCurrent());
             data.put("pages", (int) hitsNum % taskLogSearchVO.getSize() == 0 ?
                     (int) hitsNum % taskLogSearchVO.getSize() : (int) hitsNum % taskLogSearchVO.getSize() + 1);
-        } catch (TRSException e) {
+        } catch (TRSException | ParseException e) {
             e.printStackTrace();
         } finally {
             closeTrsConn();
