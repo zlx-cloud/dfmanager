@@ -16,7 +16,10 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor).addPathPatterns("/**")
                 .excludePathPatterns("/user/login")
-                .excludePathPatterns("/monitorShow/updateDiskMonitor");;
+                .excludePathPatterns("/model/queryById")
+                .excludePathPatterns("/serviceInfo/queryById")
+                .excludePathPatterns("/target/targetList")
+                .excludePathPatterns("/monitorShow/updateDiskMonitor");
     }
 
 }

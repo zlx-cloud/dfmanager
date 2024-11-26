@@ -94,26 +94,26 @@ public class UserSystemInfoController {
     }
 
     /**
-     * 查询用户系统已拥有的服务
+     * 查询用户系统服务
      */
-    @PostMapping("/userSystemHaveService")
+    @PostMapping("/userSystemService")
     @ResponseBody
-    public Result userSystemHaveService(@RequestBody UserSystemInfoVO userSystemInfoVO) {
-        log.info("查询用户系统已拥有的服务，入参用户系统ID：{}", userSystemInfoVO.getId());
-        Result result = userSystemInfoService.userSystemHaveService(userSystemInfoVO.getId());
-        log.info("查询用户系统已拥有的服务，返回：{}", JSON.toJSONString(result));
+    public Result userSystemService(@RequestBody UserSystemInfoVO userSystemInfoVO) {
+        log.info("查询用户系统服务，入参用户系统ID：{}", userSystemInfoVO.getId());
+        Result result = userSystemInfoService.userSystemService(userSystemInfoVO.getId());
+        log.info("查询用户系统服务，返回：{}", JSON.toJSONString(result));
         return result;
     }
 
     /**
-     * 查询用户系统未拥有的服务
+     * 查询用户系统的服务字段
      */
-    @PostMapping("/userSystemNotHaveService")
+    @PostMapping("/userSystemServiceCol")
     @ResponseBody
-    public Result userSystemNotHaveService(@RequestBody UserSystemInfoVO userSystemInfoVO) {
-        log.info("查询用户系统未拥有的服务，入参用户系统ID：{}", userSystemInfoVO.getId());
-        Result result = userSystemInfoService.userSystemNotHaveService(userSystemInfoVO.getId());
-        log.info("查询用户系统未拥有的服务，返回：{}", JSON.toJSONString(result));
+    public Result userSystemServiceCol(@RequestBody UserSystemInfoVO userSystemInfoVO) {
+        log.info("查询用户系统已拥有的服务字段，入参用户系统ID：{}，服务ID：{}", userSystemInfoVO.getId(), userSystemInfoVO.getServiceId());
+        Result result = userSystemInfoService.userSystemServiceCol(userSystemInfoVO.getId(), userSystemInfoVO.getServiceId());
+        log.info("查询用户系统已拥有的服务字段，返回：{}", JSON.toJSONString(result));
         return result;
     }
 

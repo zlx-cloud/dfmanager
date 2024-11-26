@@ -58,4 +58,8 @@ public class ServiceInfo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date updateTime;
 
+    // 是否选中
+    @TableField(exist = false)
+    private Boolean checked;
+
 }

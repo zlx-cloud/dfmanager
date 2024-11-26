@@ -37,14 +37,14 @@ public interface UserSystemInfoService {
     Result startOrStop(UserSystemInfoVO userSystemInfoVO);
 
     /**
-     * 查询用户系统已拥有的服务
+     * 查询用户系统服务
      */
-    Result userSystemHaveService(Integer id);
+    Result userSystemService(Integer id);
 
     /**
-     * 查询用户系统未拥有的服务
+     * 查询用户系统的服务字段
      */
-    Result userSystemNotHaveService(Integer id);
+    Result userSystemServiceCol(Integer id, Integer serviceId);
 
     /**
      * 用户系统绑定服务

@@ -58,9 +58,9 @@ hybase:
       tableComment: 外国人临住
       etlDate: ETLdate
       businessDate: STAY_DATE
-    #边检案事件
+    #违法违规数据
     - tableName: F_EVT_PSR_ILLEGAL
-      tableComment: 边检案事件
+      tableComment: 违法违规数据
       etlDate: ETLdate
       businessDate: EDIT_DT
     #涉外案事件
@@ -83,9 +83,9 @@ hybase:
       tableComment: 出入境记录
       etlDate: ETLdate
       businessDate: IMM_DATE
-    #港澳台证件签发
+    #三类(港澳台)证件签发
     - tableName: F_PER_CERT_HMT_ISSUE
-      tableComment: 港澳台证件签发
+      tableComment: 三类(港澳台)证件签发
       etlDate: ETLdate
       businessDate: ISSUING_DATE
     #遣返遣送

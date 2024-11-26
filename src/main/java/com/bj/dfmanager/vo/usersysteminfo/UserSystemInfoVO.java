@@ -43,9 +43,11 @@ public class UserSystemInfoVO {
     private String certNo;
 
     // 服务
-    private List<Integer> serviceList;
+    private List<ServiceAndColInfoVO> serviceList;
 
     // 指标
     private List<Integer> targetList;
+
+    private Integer serviceId;
 
 }

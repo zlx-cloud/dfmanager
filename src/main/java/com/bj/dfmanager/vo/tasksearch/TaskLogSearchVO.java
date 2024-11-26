@@ -26,4 +26,8 @@ public class TaskLogSearchVO extends PageVO {
     // 状态
     private String status;
 
+    private String tdrw;
+
+    private String jkmc;
+
 }
