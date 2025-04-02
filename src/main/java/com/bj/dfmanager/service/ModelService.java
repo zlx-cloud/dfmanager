@@ -46,4 +46,5 @@ public interface ModelService {
      */
     Result queryGradeList();
 
+    Result queryPublicList(ModelSearchVO modelSearchVO);
 }

@@ -51,4 +51,18 @@ public class ModelVO {
     // 等级分类ID
     private Integer gradeId;
 
+    private String modelType;
+
+    private Integer userId;
+
+    private String background;
+
+    private String checkStrategy;
+
+    private String department;
+
+    private String contact;
+
+    private String applyUser;
+
 }

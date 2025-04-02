@@ -116,10 +116,10 @@ dfmodelservice:
   exploreUrl: http://192.168.100.142:8092/status/ping
 
 mq:
-  host: 10.6.126.138
+  host: app03
   port: 5672
-  username: test
-  password: test
+  username: admin
+  password: 123456
   timeout: 5000
 
 kafka:

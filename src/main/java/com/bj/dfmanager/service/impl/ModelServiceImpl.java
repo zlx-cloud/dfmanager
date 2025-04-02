@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bj.dfmanager.entity.*;
 import com.bj.dfmanager.mapper.*;
+import com.bj.dfmanager.service.ModelDemandLogService;
 import com.bj.dfmanager.service.ModelService;
 import com.bj.dfmanager.util.JwtTokenUtils;
 import com.bj.dfmanager.vo.common.Result;
@@ -38,13 +39,23 @@ public class ModelServiceImpl implements ModelService {
     private TaskKeyValueMapper taskKeyValueMapper;
     @Resource
     private ModelGradeMapper modelGradeMapper;
+    @Resource
+    private ModelDemandLogService modelDemandLogService;
+    @Resource
+    private RoleMapper roleMapper;
 
     /**
      * 查询模型列表
      */
     @Override
     public Result queryList(ModelSearchVO modelSearchVO) {
-        IPage<Model> page = modelMapper.queryList(modelSearchVO.getModelName(),
+        String userId = "";
+        Integer currUserId = JwtTokenUtils.getCurrentUser().getUserId();
+        List<Integer> roleId = roleMapper.userHaveRoleId(currUserId);
+        if (!roleId.contains(1)) {
+            userId = currUserId + "";
+        }
+        IPage<Model> page = modelMapper.queryList(userId, modelSearchVO.getModelName(),
                 modelSearchVO.getModelStatus(), new Page<>(modelSearchVO.getCurrent(),
                         modelSearchVO.getSize()));
         return Result.success(page, "查询模型列表成功");
@@ -64,14 +75,16 @@ public class ModelServiceImpl implements ModelService {
             BeanUtils.copyProperties(modelVO, model);
             // id不存在为新增，否则为修改
             if (null == model.getId()) {
-                model.setUserId(JwtTokenUtils.getCurrentUser().getUserId());
                 model.setCreateTime(new Date());
                 model.setModelStatus("N");
+                model.setUserId(JwtTokenUtils.getCurrentUser().getUserId());
                 num = modelMapper.insert(model);
+                modelDemandLogService.addLog(model.getId(), "新建模型");
             } else {
                 flag = true;
                 model.setUpdateTime(new Date());
                 num = modelMapper.updateById(model);
+                modelDemandLogService.addLog(model.getId(), "修改模型");
             }
 
             if (num > 0) {
@@ -157,6 +170,7 @@ public class ModelServiceImpl implements ModelService {
                 // 删除模型等级分类
                 modelGradeMapper.deleteByMap(map);
 
+                modelDemandLogService.addLog(id, "删除模型");
                 return Result.success(null, "删除模型成功");
             } else {
                 return Result.fail(null, "删除模型失败");
@@ -178,6 +192,7 @@ public class ModelServiceImpl implements ModelService {
         model.setUpdateTime(new Date());
         int num = modelMapper.updateById(model);
         if (num > 0) {
+            modelDemandLogService.addLog(model.getId(), "启用/停用模型");
             return Result.success(null, "操作成功");
         } else {
             return Result.fail(null, "操作成功");
@@ -189,7 +204,13 @@ public class ModelServiceImpl implements ModelService {
      */
     @Override
     public Result queryResultList(ModelSearchVO modelSearchVO) {
-        IPage<ModelResult> page = modelResultMapper.queryResultList(modelSearchVO.getModelName(),
+        String userId = "";
+        Integer currUserId = JwtTokenUtils.getCurrentUser().getUserId();
+        List<Integer> roleId = roleMapper.userHaveRoleId(currUserId);
+        if (!roleId.contains(1)) {
+            userId = currUserId + "";
+        }
+        IPage<ModelResult> page = modelResultMapper.queryResultList(userId, modelSearchVO.getModelName(),
                 modelSearchVO.getWarnFlag(), modelSearchVO.getCertNo(), modelSearchVO.getFltno(),
                 modelSearchVO.getFltDateStart(), modelSearchVO.getFltDateEnd(),
                 new Page<>(modelSearchVO.getCurrent(), modelSearchVO.getSize()));
@@ -214,6 +235,14 @@ public class ModelServiceImpl implements ModelService {
         queryWrapper.eq(TaskKeyValue::getType, "DJFL");
         List<TaskKeyValue> list = taskKeyValueMapper.selectList(queryWrapper);
         return Result.success(list, "查询等级分类列表成功");
+    }
+
+    @Override
+    public Result queryPublicList(ModelSearchVO modelSearchVO) {
+        IPage<Model> page = modelMapper.queryPublicList(modelSearchVO.getModelName(),
+                modelSearchVO.getModelStatus(), new Page<>(modelSearchVO.getCurrent(),
+                        modelSearchVO.getSize()));
+        return Result.success(page, "查询模型列表成功");
     }
 
 }

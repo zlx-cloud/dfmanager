@@ -86,4 +86,28 @@ public class Model {
     @TableField("USER_ID")
     private Integer userId;
 
+    @TableField("MODEL_TYPE")
+    private String modelType;
+
+    @TableField("BACKGROUND")
+    private String background;
+
+    @TableField("CHECK_STRATEGY")
+    private String checkStrategy;
+
+    @TableField("DEPARTMENT")
+    private String department;
+
+    @TableField("CONTACT")
+    private String contact;
+
+    @TableField("APPLY_USER")
+    private String applyUser;
+
+    @TableField(exist = false)
+    private String applyUserName;
+
+    @TableField(exist = false)
+    private String departmentName;
+
 }

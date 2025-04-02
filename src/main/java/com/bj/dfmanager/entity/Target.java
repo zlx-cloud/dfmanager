@@ -77,4 +77,10 @@ public class Target {
     @TableField("REQUEST_METHOD")
     private String requestMethod;
 
+    @TableField("TARGET_REASON_CREATED")
+    private String targetReasonCreated;
+
+    @TableField("TARGET_INSTRUCTIONS")
+    private String targetInstructions;
+
 }

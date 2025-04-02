@@ -22,7 +22,6 @@ public class ModelDemandController {
     private ModelDemandService modelDemandService;
 
     //--------------------------------模型申请--------------------------------
-
     /**
      * 查询模型申请列表
      */
@@ -60,22 +59,9 @@ public class ModelDemandController {
     }
 
     //--------------------------------模型审核--------------------------------
-
-    /**
-     * 模型分配
-     */
-    @PostMapping("/allocation")
-    @ResponseBody
-    public Result allocation(@RequestBody ModelDemandVO modelDemandVO) {
-        log.info("模型分配，入参：{}", JSON.toJSONString(modelDemandVO));
-        Result result = modelDemandService.allocation(modelDemandVO);
-        log.info("模型分配，返回：{}", JSON.toJSONString(result));
-        return result;
-    }
-
     /**
      * 模型需求阶段变更
-     * 开发完成-待审核   审核通过-已完成   审核不通过-已关闭
+     * 通过传2  撤回传0  审核通过传3  退回传0
      */
     @PostMapping("/updateStage")
     @ResponseBody
@@ -87,7 +73,6 @@ public class ModelDemandController {
     }
 
     //--------------------------------模型任务--------------------------------
-
     /**
      * 查看分配给自己的模型需求
      */
@@ -97,6 +82,36 @@ public class ModelDemandController {
         log.info("查看分配给自己的模型需求，入参：{}", JSON.toJSONString(modelDemandSearchVO));
         Result result = modelDemandService.queryMyList(modelDemandSearchVO);
         log.info("查看分配给自己的模型需求，返回：{}", JSON.toJSONString(result));
+        return result;
+    }
+
+    //--------------------------------公开模型申请--------------------------------
+    @PostMapping("/queryPublicList")
+    @ResponseBody
+    public Result queryPublicList(@RequestBody ModelDemandSearchVO modelDemandSearchVO) {
+        log.info("查询公开模型申请列表，入参：{}", JSON.toJSONString(modelDemandSearchVO));
+        Result result = modelDemandService.queryPublicList(modelDemandSearchVO);
+        log.info("查询公开模型申请列表，返回：{}", JSON.toJSONString(result));
+        return result;
+    }
+
+    //--------------------------------模型审核编辑--------------------------------
+    @PostMapping("/update")
+    @ResponseBody
+    public Result update(@RequestBody ModelDemandVO modelDemandVO) {
+        log.info("模型审核编辑，入参：{}", JSON.toJSONString(modelDemandVO));
+        Result result = modelDemandService.update(modelDemandVO);
+        log.info("模型审核编辑，返回：{}", JSON.toJSONString(result));
+        return result;
+    }
+
+    //--------------------------------模型需求日志--------------------------------
+    @PostMapping("/queryModelDemandLog")
+    @ResponseBody
+    public Result queryModelDemandLog(@RequestBody ModelDemandSearchVO modelDemandSearchVO) {
+        log.info("查询模型需求日志，入参：{}", JSON.toJSONString(modelDemandSearchVO));
+        Result result = modelDemandService.queryModelDemandLog(modelDemandSearchVO);
+        log.info("查询模型需求日志，返回：{}", JSON.toJSONString(result));
         return result;
     }
 

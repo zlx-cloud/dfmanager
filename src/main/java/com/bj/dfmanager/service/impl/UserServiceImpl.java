@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -69,6 +70,9 @@ public class UserServiceImpl implements UserService {
         user.setToken(token);
         user.setUpdateTime(new Date());
         userMapper.updateById(user);
+
+        List<Role> roleList = roleMapper.userHaveRole(user.getUserId());
+        user.setRoleList(roleList.stream().map(Role::getRoleId).distinct().collect(Collectors.toList()));
 
         return Result.success(user, "登录成功");
     }
@@ -138,6 +142,8 @@ public class UserServiceImpl implements UserService {
                 User::getGender, userSearchVO.getGender());
         queryWrapper.eq(StringUtils.isNotEmpty(userSearchVO.getUserStatus()),
                 User::getUserStatus, userSearchVO.getUserStatus());
+        queryWrapper.eq(StringUtils.isNotEmpty(userSearchVO.getDepartment()),
+                User::getDepartment, userSearchVO.getDepartment());
         queryWrapper.orderByDesc(User::getCreateTime);
         IPage<User> page = userMapper.selectPage(new Page<>(userSearchVO.getCurrent(),
                 userSearchVO.getSize()), queryWrapper);

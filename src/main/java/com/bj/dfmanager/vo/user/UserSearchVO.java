@@ -29,4 +29,7 @@ public class UserSearchVO extends PageVO {
     // 用户状态
     private String userStatus;
 
+    // 部门
+    private String department;
+
 }

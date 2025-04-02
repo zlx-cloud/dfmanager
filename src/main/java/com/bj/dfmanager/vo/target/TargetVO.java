@@ -59,4 +59,8 @@ public class TargetVO {
     // 请求方法
     private String requestMethod;
 
+    private String targetReasonCreated;
+
+    private String targetInstructions;
+
 }

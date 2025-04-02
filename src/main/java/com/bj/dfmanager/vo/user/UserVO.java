@@ -36,4 +36,10 @@ public class UserVO {
     // 角色
     private List<Integer> roleList;
 
+    // 部门
+    private String department;
+
+    // 联系方式
+    private String contact;
+
 }

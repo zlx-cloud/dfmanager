@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户
@@ -60,5 +61,16 @@ public class User {
     @TableField("UPDATE_TIME")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date updateTime;
+
+    // 部门
+    @TableField("DEPARTMENT")
+    private String department;
+
+    // 联系方式
+    @TableField("CONTACT")
+    private String contact;
+
+    @TableField(exist = false)
+    private List<Integer> roleList;
 
 }

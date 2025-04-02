@@ -17,6 +17,13 @@ public interface RoleMapper extends BaseMapper<Role> {
     List<Role> userHaveRole(@Param("userId") Integer userId);
 
     /**
+     * 查询用户已拥有的角色
+     */
+    @Select("SELECT R.ROLE_ID FROM T_USER_ROLE UR LEFT JOIN T_ROLE R ON UR.ROLE_ID = R.ROLE_ID " +
+            "WHERE UR.USER_ID = #{userId} AND R.ROLE_STATUS = 'Y'")
+    List<Integer> userHaveRoleId(@Param("userId") Integer userId);
+
+    /**
      * 查询用户未拥有的角色
      */
     @Select("SELECT * FROM T_ROLE R WHERE R.ROLE_STATUS ='Y' AND R.ROLE_ID NOT IN " +

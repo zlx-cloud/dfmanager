@@ -1,11 +1,13 @@
 package com.bj.dfmanager.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bj.dfmanager.entity.ModelDemand;
+import com.bj.dfmanager.entity.ModelDemandLog;
+import com.bj.dfmanager.mapper.ModelDemandLogMapper;
 import com.bj.dfmanager.mapper.ModelDemandMapper;
+import com.bj.dfmanager.mapper.RoleMapper;
+import com.bj.dfmanager.service.ModelDemandLogService;
 import com.bj.dfmanager.service.ModelDemandService;
 import com.bj.dfmanager.util.JwtTokenUtils;
 import com.bj.dfmanager.vo.common.Result;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -24,28 +27,27 @@ public class ModelDemandServiceImpl implements ModelDemandService {
 
     @Resource
     private ModelDemandMapper modelDemandMapper;
+    @Resource
+    private ModelDemandLogService modelDemandLogService;
+    @Resource
+    private ModelDemandLogMapper modelDemandLogMapper;
+    @Resource
+    private RoleMapper roleMapper;
 
     /**
      * 查询模型需求列表
      */
     @Override
-    public Result queryList(ModelDemandSearchVO modelDemandSearchVO) {
-        LambdaQueryWrapper<ModelDemand> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotEmpty(modelDemandSearchVO.getModelName()),
-                ModelDemand::getModelName, modelDemandSearchVO.getModelName());
-        queryWrapper.eq(StringUtils.isNotEmpty(modelDemandSearchVO.getModelType()),
-                ModelDemand::getModelType, modelDemandSearchVO.getModelType());
-        queryWrapper.eq(StringUtils.isNotEmpty(modelDemandSearchVO.getUseScope()),
-                ModelDemand::getUseScope, modelDemandSearchVO.getUseScope());
-        queryWrapper.eq(StringUtils.isNotEmpty(modelDemandSearchVO.getDemandUnit()),
-                ModelDemand::getDemandUnit, modelDemandSearchVO.getDemandUnit());
-        queryWrapper.like(StringUtils.isNotEmpty(modelDemandSearchVO.getDeveloper()),
-                ModelDemand::getDeveloper, modelDemandSearchVO.getDeveloper());
-        queryWrapper.eq(StringUtils.isNotEmpty(modelDemandSearchVO.getDemandStatus()),
-                ModelDemand::getDemandStatus, modelDemandSearchVO.getDemandStatus());
-        queryWrapper.orderByDesc(ModelDemand::getCreateTime);
-        IPage<ModelDemand> page = modelDemandMapper.selectPage(new Page<>(modelDemandSearchVO.getCurrent(),
-                modelDemandSearchVO.getSize()), queryWrapper);
+    public Result queryList(ModelDemandSearchVO vo) {
+        String userId = "";
+        Integer currUserId = JwtTokenUtils.getCurrentUser().getUserId();
+        List<Integer> roleId = roleMapper.userHaveRoleId(currUserId);
+        if (!roleId.contains(1)) {
+            userId = currUserId + "";
+        }
+        IPage<ModelDemand> page = modelDemandMapper.selectByPage(new Page<>(vo.getCurrent(),
+                        vo.getSize()), vo.getModelName(), vo.getModelType(), vo.getUseScope(),
+                vo.getDemandUnit(), vo.getDemandStatus(), userId);
         return Result.success(page, "查询模型需求列表成功");
     }
 
@@ -54,11 +56,20 @@ public class ModelDemandServiceImpl implements ModelDemandService {
      */
     @Override
     public Result apply(ModelDemandVO modelDemandVO) {
+        int num;
         ModelDemand modelDemand = new ModelDemand();
         BeanUtils.copyProperties(modelDemandVO, modelDemand);
-        modelDemand.setCreateTime(new Date());
-        modelDemand.setDemandStatus("0");
-        int num = modelDemandMapper.insert(modelDemand);
+        if (null == modelDemand.getId()) {
+            modelDemand.setApplyUser(JwtTokenUtils.getCurrentUser().getUserId() + "");
+            modelDemand.setCreateTime(new Date());
+            num = modelDemandMapper.insert(modelDemand);
+            modelDemandLogService.addLog(modelDemand.getId(), "新建模型申请");
+        } else {
+            modelDemand.setUpdateTime(new Date());
+            num = modelDemandMapper.updateById(modelDemand);
+            modelDemandLogService.addLog(modelDemand.getId(), "修改模型申请");
+        }
+
         if (num > 0) {
             return Result.success(null, "模型申请成功");
         } else {
@@ -71,25 +82,8 @@ public class ModelDemandServiceImpl implements ModelDemandService {
      */
     @Override
     public Result queryById(Integer id) {
-        ModelDemand modelDemand = modelDemandMapper.selectById(id);
+        ModelDemand modelDemand = modelDemandMapper.queryId(id);
         return Result.success(modelDemand, "查询模型需求成功");
-    }
-
-    /**
-     * 模型分配
-     */
-    @Override
-    public Result allocation(ModelDemandVO modelDemandVO) {
-        ModelDemand modelDemand = new ModelDemand();
-        BeanUtils.copyProperties(modelDemandVO, modelDemand);
-        modelDemand.setUpdateTime(new Date());
-        modelDemand.setDemandStatus("1");
-        int num = modelDemandMapper.updateById(modelDemand);
-        if (num > 0) {
-            return Result.success(null, "模型分配成功");
-        } else {
-            return Result.fail(null, "模型分配失败");
-        }
     }
 
     /**
@@ -97,11 +91,10 @@ public class ModelDemandServiceImpl implements ModelDemandService {
      */
     @Override
     public Result updateStage(ModelDemandVO modelDemandVO) {
-        ModelDemand modelDemand = new ModelDemand();
-        BeanUtils.copyProperties(modelDemandVO, modelDemand);
-        modelDemand.setUpdateTime(new Date());
-        int num = modelDemandMapper.updateById(modelDemand);
+        int num = modelDemandMapper.updateStage(modelDemandVO.getId(),
+                modelDemandVO.getDemandStatus(),modelDemandVO.getAdvice());
         if (num > 0) {
+            modelDemandLogService.addLog(modelDemandVO.getId(), "模型需求阶段变更");
             return Result.success(null, "模型需求阶段变更成功");
         } else {
             return Result.fail(null, "模型需求阶段变更失败");
@@ -112,22 +105,53 @@ public class ModelDemandServiceImpl implements ModelDemandService {
      * 查看分配给自己的模型需求
      */
     @Override
-    public Result queryMyList(ModelDemandSearchVO modelDemandSearchVO) {
-        LambdaQueryWrapper<ModelDemand> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotEmpty(modelDemandSearchVO.getModelName()),
-                ModelDemand::getModelName, modelDemandSearchVO.getModelName())
-                .eq(StringUtils.isNotEmpty(modelDemandSearchVO.getModelType()),
-                        ModelDemand::getModelType, modelDemandSearchVO.getModelType())
-                .eq(StringUtils.isNotEmpty(modelDemandSearchVO.getUseScope()),
-                        ModelDemand::getUseScope, modelDemandSearchVO.getUseScope())
-                .eq(StringUtils.isNotEmpty(modelDemandSearchVO.getDemandUnit()),
-                        ModelDemand::getDemandUnit, modelDemandSearchVO.getDemandUnit())
-                .eq(StringUtils.isNotEmpty(modelDemandSearchVO.getDeveloper()),
-                        ModelDemand::getDeveloper, JwtTokenUtils.getCurrentUser().getUserId())
-                .orderByDesc(ModelDemand::getCreateTime);
-        IPage<ModelDemand> page = modelDemandMapper.selectPage(new Page<>(modelDemandSearchVO.getCurrent(),
-                modelDemandSearchVO.getSize()), queryWrapper);
+    public Result queryMyList(ModelDemandSearchVO vo) {
+        IPage<ModelDemand> page = modelDemandMapper.queryMyList(new Page<>(vo.getCurrent(),
+                        vo.getSize()), vo.getModelName(), vo.getModelType(), vo.getUseScope(),
+                vo.getDemandUnit(), JwtTokenUtils.getCurrentUser().getUserId());
         return Result.success(page, "查看分配给自己的模型需求列表成功");
+    }
+
+    /**
+     * 查询公开模型申请列表
+     */
+    @Override
+    public Result queryPublicList(ModelDemandSearchVO vo) {
+        String userId = "";
+        Integer currUserId = JwtTokenUtils.getCurrentUser().getUserId();
+        List<Integer> roleId = roleMapper.userHaveRoleId(currUserId);
+        if (!roleId.contains(1)) {
+            userId = currUserId + "";
+        }
+        IPage<ModelDemand> page = modelDemandMapper.queryPublicList(new Page<>(vo.getCurrent(),
+                        vo.getSize()), vo.getModelName(), vo.getModelType(), vo.getUseScope(),
+                vo.getDemandUnit(), vo.getDemandStatus(), userId);
+        return Result.success(page, "查询模型需求列表成功");
+    }
+
+    /**
+     * 模型审核编辑
+     */
+    @Override
+    public Result update(ModelDemandVO modelDemandVO) {
+        ModelDemand modelDemand = new ModelDemand();
+        BeanUtils.copyProperties(modelDemandVO, modelDemand);
+        modelDemand.setUpdateTime(new Date());
+        int num = modelDemandMapper.updateById(modelDemand);
+        if (num > 0) {
+            modelDemandLogService.addLog(modelDemand.getId(), "模型审核编辑");
+            return Result.success(null, "模型编辑成功");
+        } else {
+            return Result.fail(null, "模型编辑失败");
+        }
+    }
+
+    @Override
+    public Result queryModelDemandLog(ModelDemandSearchVO modelDemandSearchVO) {
+        IPage<ModelDemandLog> page = modelDemandLogMapper.queryModelDemandLog(modelDemandSearchVO.getModelName(),
+                modelDemandSearchVO.getUserName(), new Page<>(modelDemandSearchVO.getCurrent(),
+                        modelDemandSearchVO.getSize()));
+        return Result.success(page, "查询模型需求日志成功");
     }
 
 }

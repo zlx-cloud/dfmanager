@@ -116,4 +116,16 @@ public class ModelController {
         return result;
     }
 
+    /**
+     * 公开模型
+     */
+    @PostMapping("/queryPublicList")
+    @ResponseBody
+    public Result queryPublicList(@RequestBody ModelSearchVO modelSearchVO) {
+        log.info("查询公开模型列表，入参：{}", JSON.toJSONString(modelSearchVO));
+        Result result = modelService.queryPublicList(modelSearchVO);
+        log.info("查询公开模型列表，返回：{}", JSON.toJSONString(result));
+        return result;
+    }
+
 }

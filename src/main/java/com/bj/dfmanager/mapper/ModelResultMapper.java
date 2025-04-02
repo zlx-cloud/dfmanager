@@ -15,7 +15,8 @@ public interface ModelResultMapper extends BaseMapper<ModelResult> {
     /**
      * 模型结果查询
      */
-    IPage<ModelResult> queryResultList(@Param("modelName") String modelName,
+    IPage<ModelResult> queryResultList(@Param("userId") String userId,
+                                       @Param("modelName") String modelName,
                                        @Param("warnFlag") String warnFlag,
                                        @Param("certNo") String certNo,
                                        @Param("fltno") String fltno,

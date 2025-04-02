@@ -25,6 +25,10 @@
         <if test="fltDateEnd != null and fltDateEnd != ''">
             and mr.FLTNODATE &lt;= #{fltDateEnd}
         </if>
+        <if test="userId != null and userId != ''">
+            and m.USER_ID = #{userId}
+        </if>
+        ORDER BY mr.CREATE_TIME desc
     </select>
 
     <select id="modelCountTrend" resultType="java.util.Map">

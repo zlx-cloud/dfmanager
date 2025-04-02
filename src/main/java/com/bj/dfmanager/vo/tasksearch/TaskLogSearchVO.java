@@ -30,4 +30,7 @@ public class TaskLogSearchVO extends PageVO {
 
     private String jkmc;
 
+    // 关键字
+    private String keyWord;
+
 }

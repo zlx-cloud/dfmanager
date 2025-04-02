@@ -24,9 +24,12 @@ public class ModelDemandSearchVO extends PageVO {
     private String demandUnit;
 
     // 开发人员
-    private String developer;
+    //private String developer;
 
     // 需求状态
     private String demandStatus;
+
+    // 操作人
+    private String userName;
 
 }

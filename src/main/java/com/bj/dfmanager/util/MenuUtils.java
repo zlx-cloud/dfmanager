@@ -1,5 +1,6 @@
 package com.bj.dfmanager.util;
 
+import com.bj.dfmanager.entity.Dept;
 import com.bj.dfmanager.entity.Menu;
 import com.bj.dfmanager.entity.ServiceMenu;
 
@@ -34,6 +35,17 @@ public class MenuUtils {
             }
         }
         return menuTree;
+    }
+
+    public static List<Dept> getDeptChildren(List<Dept> deptList, Integer pid) {
+        List<Dept> deptTree = new ArrayList<>();
+        for (Dept dept : deptList) {
+            if (pid.equals(dept.getPid())) {
+                dept.setChildren(getDeptChildren(deptList, dept.getId()));
+                deptTree.add(dept);
+            }
+        }
+        return deptTree;
     }
 
 }

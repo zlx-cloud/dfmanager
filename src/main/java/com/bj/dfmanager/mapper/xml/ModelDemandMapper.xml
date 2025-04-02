@@ -3,4 +3,94 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bj.dfmanager.mapper.ModelDemandMapper">
 
+    <select id="selectByPage" resultType="com.bj.dfmanager.entity.ModelDemand">
+        SELECT T.*,A.FULL_NAME AS DEMAND_UNIT_NAME,B.FULL_NAME AS APPLY_DEPARTMENT_NAME,
+            C.REAL_NAME AS APPLY_USER_NAME FROM DFMANAGER.T_MODEL_DEMAND T
+        LEFT JOIN DFMANAGER.T_DEPT A ON T.DEMAND_UNIT = A.ID
+        LEFT JOIN DFMANAGER.T_DEPT B ON T.APPLY_DEPARTMENT = B.ID
+        LEFT JOIN DFMANAGER.T_USER C ON T.APPLY_USER = C.USER_ID
+        WHERE 1 = 1
+        <if test="modelName != null and modelName != ''">
+            and T.MODEL_NAME like '%'||#{modelName}||'%'
+        </if>
+        <if test="modelType != null and modelType != ''">
+            and T.MODEL_TYPE = #{modelType}
+        </if>
+        <if test="useScope != null and useScope != ''">
+            and T.USE_SCOPE = #{useScope}
+        </if>
+        <if test="demandUnit != null and demandUnit != ''">
+            and T.DEMAND_UNIT = #{demandUnit}
+        </if>
+        <if test="demandStatus != null and demandStatus != ''">
+            and T.DEMAND_STATUS = #{demandStatus}
+        </if>
+        <if test="userId != null and userId != ''">
+            and T.APPLY_USER = #{userId}
+        </if>
+        ORDER BY T.CREATE_TIME DESC
+    </select>
+
+    <select id="queryId" resultType="com.bj.dfmanager.entity.ModelDemand">
+        SELECT T.*,A.FULL_NAME AS DEMAND_UNIT_NAME,B.FULL_NAME AS APPLY_DEPARTMENT_NAME,
+        C.REAL_NAME AS APPLY_USER_NAME FROM DFMANAGER.T_MODEL_DEMAND T
+        LEFT JOIN DFMANAGER.T_DEPT A ON T.DEMAND_UNIT = A.ID
+        LEFT JOIN DFMANAGER.T_DEPT B ON T.APPLY_DEPARTMENT = b.ID
+        LEFT JOIN DFMANAGER.T_USER C ON T.APPLY_USER = C.USER_ID
+        WHERE T.ID = #{id}
+    </select>
+
+    <select id="queryMyList" resultType="com.bj.dfmanager.entity.ModelDemand">
+        SELECT T.*,A.FULL_NAME AS DEMAND_UNIT_NAME,B.FULL_NAME AS APPLY_DEPARTMENT_NAME,
+        C.REAL_NAME AS APPLY_USER_NAME FROM DFMANAGER.T_MODEL_DEMAND T
+        LEFT JOIN DFMANAGER.T_DEPT A ON T.DEMAND_UNIT = A.ID
+        LEFT JOIN DFMANAGER.T_DEPT B ON T.APPLY_DEPARTMENT = b.ID
+        LEFT JOIN DFMANAGER.T_USER C ON T.APPLY_USER = C.USER_ID
+        WHERE 1 = 1
+        <if test="modelName != null and modelName != ''">
+            and T.MODEL_NAME like '%'||#{modelName}||'%'
+        </if>
+        <if test="modelType != null and modelType != ''">
+            and T.MODEL_TYPE = #{modelType}
+        </if>
+        <if test="useScope != null and useScope != ''">
+            and T.USE_SCOPE = #{useScope}
+        </if>
+        <if test="demandUnit != null and demandUnit != ''">
+            and T.DEMAND_UNIT = #{demandUnit}
+        </if>
+        <if test="userId != null and userId != ''">
+            and T.APPLY_USER = #{userId}
+        </if>
+        ORDER BY T.CREATE_TIME DESC
+    </select>
+
+    <select id="queryPublicList" resultType="com.bj.dfmanager.entity.ModelDemand">
+        SELECT T.*,A.FULL_NAME AS DEMAND_UNIT_NAME,B.FULL_NAME AS APPLY_DEPARTMENT_NAME,
+        C.REAL_NAME AS APPLY_USER_NAME FROM DFMANAGER.T_MODEL_DEMAND T
+        LEFT JOIN DFMANAGER.T_DEPT A ON T.DEMAND_UNIT = A.ID
+        LEFT JOIN DFMANAGER.T_DEPT B ON T.APPLY_DEPARTMENT = b.ID
+        LEFT JOIN DFMANAGER.T_USER C ON T.APPLY_USER = C.USER_ID
+        WHERE T.APPLY_TYPE = 'Y'
+        <if test="modelName != null and modelName != ''">
+            and T.MODEL_NAME like '%'||#{modelName}||'%'
+        </if>
+        <if test="modelType != null and modelType != ''">
+            and T.MODEL_TYPE = #{modelType}
+        </if>
+        <if test="useScope != null and useScope != ''">
+            and T.USE_SCOPE = #{useScope}
+        </if>
+        <if test="demandUnit != null and demandUnit != ''">
+            and T.DEMAND_UNIT = #{demandUnit}
+        </if>
+        <if test="demandStatus != null and demandStatus != ''">
+            and T.DEMAND_STATUS = #{demandStatus}
+        </if>
+        <if test="userId != null and userId != ''">
+            and T.APPLY_USER = #{userId}
+        </if>
+        ORDER BY T.CREATE_TIME DESC
+    </select>
+
 </mapper>

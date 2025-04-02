@@ -22,11 +22,6 @@ public interface ModelDemandService {
     Result queryById(Integer id);
 
     /**
-     * 模型分配
-     */
-    Result allocation(ModelDemandVO modelDemandVO);
-
-    /**
      * 模型需求阶段变更
      */
     Result updateStage(ModelDemandVO modelDemandVO);
@@ -35,5 +30,20 @@ public interface ModelDemandService {
      * 查看分配给自己的模型需求
      */
     Result queryMyList(ModelDemandSearchVO modelDemandSearchVO);
+
+    /**
+     * 查询公开模型申请列表
+     */
+    Result queryPublicList(ModelDemandSearchVO modelDemandSearchVO);
+
+    /**
+     * 模型审核编辑
+     */
+    Result update(ModelDemandVO modelDemandVO);
+
+    /**
+     * 查询模型需求日志
+     */
+    Result queryModelDemandLog(ModelDemandSearchVO modelDemandSearchVO);
 
 }

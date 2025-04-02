@@ -74,6 +74,10 @@ public class TaskLogServiceImpl implements TaskLogService {
         if (StringUtils.isNotEmpty(taskLogSearchVO.getTdrw())) {
             sb.append("DATA_TYPE:").append(taskLogSearchVO.getTdrw()).append(" AND ");
         }
+        if (StringUtils.isNotEmpty(taskLogSearchVO.getKeyWord())) {
+            sb.append("(PARAMS:").append(taskLogSearchVO.getKeyWord()).append(" OR ");
+            sb.append("TASK_RESULT:").append(taskLogSearchVO.getKeyWord()).append(") AND ");
+        }
 
         // 检索语句
         String searchWord = null;
